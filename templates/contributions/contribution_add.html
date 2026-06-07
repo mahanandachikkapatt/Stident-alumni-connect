@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Contribution - Alumni Connect{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Add Contribution</h2>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Contribution Type</label>
+                        <select name="contribution_type" class="form-select" required>
+                            <option value="FINANCIAL">Financial</option>
+                            <option value="MENTORING">Mentoring</option>
+                            <option value="EVENT_SUPPORT">Event Support</option>
+                            <option value="GUEST_LECTURE">Guest Lecture</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Amount (if financial)</label>
+                        <input type="number" name="amount" class="form-control" step="0.01">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Contribution</button>
+                    <a href="{% url 'contribution_list' %}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

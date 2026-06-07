@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Alumni Connect{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-white py-5 mb-5">
+    <div class="hero-content text-center">
+        <h1 class="display-3 fw-bold mb-4">
+            <i class="fas fa-graduation-cap me-3"></i>Welcome to Alumni Connect
+        </h1>
+        <p class="lead mb-4 fs-4">Bridging the gap between alumni, students, and institution</p>
+        <p class="mb-4">Join our community to network, learn, and grow together</p>
+        <div class="mt-4">
+            {% if not user.is_authenticated %}
+                <a href="{% url 'alumni_register' %}" class="btn btn-light btn-lg me-3">
+                    <i class="fas fa-user-graduate me-2"></i>Join as Alumni
+                </a>
+                <a href="{% url 'student_register' %}" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-user me-2"></i>Join as Student
+                </a>
+            {% else %}
+                <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg">
+                    <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="mb-5">
+    <div class="section-title">
+        <h2>Why Join Alumni Connect?</h2>
+        <p>Discover the benefits of being part of our community</p>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 text-center p-4">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-users fa-3x text-primary"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Network & Connect</h5>
+                    <p class="card-text text-muted">Build lasting relationships with fellow alumni and students. Expand your professional network.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 text-center p-4">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-hand-holding-heart fa-3x text-success"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Alumni Network</h5>
+                    <p class="card-text text-muted">Connect with alumni for guidance and career opportunities. Share your experience and knowledge.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card h-100 text-center p-4">
+                <div class="card-body">
+                    <div class="feature-icon mb-3">
+                        <i class="fas fa-calendar-star fa-3x text-info"></i>
+                    </div>
+                    <h5 class="card-title fw-bold">Events & Activities</h5>
+                    <p class="card-text text-muted">Participate in alumni events, reunions, workshops, and campus activities.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="mb-5">
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="fas fa-user-graduate"></i>
+                <h3>500+</h3>
+                <p>Alumni</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="fas fa-user-friends"></i>
+                <h3>200+</h3>
+                <p>Students</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="fas fa-calendar-alt"></i>
+                <h3>50+</h3>
+                <p>Events</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <i class="fas fa-briefcase"></i>
+                <h3>100+</h3>
+                <p>Jobs Posted</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="mb-5">
+    <div class="card bg-primary text-white p-5 text-center">
+        <div class="card-body">
+            <h2 class="card-title fw-bold mb-3">Ready to Get Started?</h2>
+            <p class="card-text mb-4 fs-5">Join our community today and start connecting</p>
+            {% if not user.is_authenticated %}
+                <a href="{% url 'login' %}" class="btn btn-light btn-lg">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
+            {% else %}
+                <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg">
+                    <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Recent Announcements -->
+{% if announcements %}
+<section class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">
+            <i class="fas fa-bullhorn me-2 text-primary"></i>Recent Announcements
+        </h2>
+        <a href="{% url 'announcements' %}" class="btn btn-outline-primary">View All</a>
+    </div>
+    
+    <div class="row g-4">
+        {% for announcement in announcements|slice:":3" %}
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">{{ announcement.title }}</h5>
+                        <p class="card-text text-muted">{{ announcement.content|truncatewords:20 }}</p>
+                        <small class="text-muted">
+                            <i class="far fa-calendar me-1"></i>{{ announcement.created_at|date:"M d, Y" }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Upcoming Events Preview -->
+<section class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">
+            <i class="fas fa-calendar-star me-2 text-info"></i>Upcoming Events
+        </h2>
+        <a href="{% url 'event_list' %}" class="btn btn-outline-info">View All Events</a>
+    </div>
+    
+    <div class="row g-4">
+        {% for event in events|slice:":3" %}
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-header bg-info text-white">
+                        <i class="fas fa-calendar-alt me-2"></i>{{ event.date|date:"M d, Y" }}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">{{ event.title }}</h5>
+                        <p class="card-text text-muted">{{ event.description|truncatewords:15 }}</p>
+                        <p class="mb-1">
+                            <i class="fas fa-map-marker-alt me-1 text-muted"></i>
+                            {{ event.location }}
+                        </p>
+                        <a href="{% url 'event_detail' event.id %}" class="btn btn-sm btn-info mt-2">View Details</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>No upcoming events at the moment. Check back later!
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

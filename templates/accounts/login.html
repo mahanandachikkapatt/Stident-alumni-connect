@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - Alumni Connect{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center min-vh-75 align-items-center">
+    <div class="col-md-5">
+        <div class="card border-0 shadow-lg">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
+                    <h3 class="fw-bold">Welcome Back</h3>
+                    <p class="text-muted">Login to your Alumni Connect account</p>
+                </div>
+                
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="id_username" class="form-label">
+                            <i class="fas fa-user me-2"></i>Username
+                        </label>
+                        <input type="text" name="username" class="form-control form-control-lg" id="id_username" 
+                               placeholder="Enter your username" required>
+                        {% if form.username.errors %}
+                            <div class="text-danger mt-1">{{ form.username.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-4">
+                        <label for="id_password" class="form-label">
+                            <i class="fas fa-lock me-2"></i>Password
+                        </label>
+                        <input type="password" name="password" class="form-control form-control-lg" id="id_password" 
+                               placeholder="Enter your password" required>
+                        {% if form.password.errors %}
+                            <div class="text-danger mt-1">{{ form.password.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-4 form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mb-4">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </button>
+                </form>
+                
+                <hr class="my-4">
+                
+                <div class="text-center">
+                    <p class="text-muted mb-3">Don't have an account?</p>
+                    <div class="d-flex gap-2 justify-content-center">
+                        <a href="{% url 'alumni_register' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-user-graduate me-2"></i>Register as Alumni
+                        </a>
+                        <a href="{% url 'student_register' %}" class="btn btn-outline-success">
+                            <i class="fas fa-user me-2"></i>Register as Student
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'home' %}" class="text-muted text-decoration-none">
+                <i class="fas fa-arrow-left me-2"></i>Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .min-vh-75 {
+        min-height: 75vh;
+    }
+    .card {
+        border-radius: 20px;
+    }
+    .form-control-lg {
+        padding: 12px 20px;
+        border-radius: 12px;
+    }
+    .btn-lg {
+        padding: 12px 30px;
+        border-radius: 12px;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Alumni - Alumni Connect{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Available Alumni</h2>
+    </div>
+</div>
+
+<div class="row mt-4">
+    {% for alumni_single in alumni %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ alumni_single.user.get_full_name|default:alumni_single.user.username }}</h5>
+                <p class="card-text">
+                    <strong>Degree:</strong> {{ alumni_single.degree }}<br>
+                    <strong>Department:</strong> {{ alumni_single.department }}<br>
+                    <strong>Graduation Year:</strong> {{ alumni_single.graduation_year }}
+                </p>
+                {% if user.is_authenticated and user.role == 'STUDENT' %}
+                <form method="post" action="{% url 'alumni_request' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="mentor_id" value="{{ alumni_single.user.id }}">
+                    <div class="mb-2">
+                        <textarea name="message" class="form-control" placeholder="Introduce yourself..." rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Request Connection</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-md-12">
+        <p>No alumni available at the moment.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

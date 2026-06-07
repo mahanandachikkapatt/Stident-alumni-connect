@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile - Alumni Connect{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Edit Profile</h2>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {% if u_form.errors %}
+                            <div class="alert alert-danger">
+                                <h6>Please correct the following errors:</h6>
+                                <ul class="mb-0">
+                                    {% for field, errors in u_form.errors.items %}
+                                        {% for error in errors %}
+                                            <li>{{ field|title }}: {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <h5 class="card-title">User Information</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_username" class="form-label">Username</label>
+                                <input type="text" id="id_username" name="username" class="form-control" value="{{ u_form.username.value|default:user.username }}" readonly>
+                                {% if u_form.username.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in u_form.username.errors %}
+                                            {{ error }}<br>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_email" class="form-label">Email</label>
+                                <input type="email" id="id_email" name="email" class="form-control" value="{{ u_form.email.value|default:user.email }}">
+                                {% if u_form.email.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in u_form.email.errors %}
+                                            {{ error }}<br>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_first_name" class="form-label">First Name</label>
+                                <input type="text" id="id_first_name" name="first_name" class="form-control" value="{{ u_form.first_name.value|default:user.first_name }}">
+                                {% if u_form.first_name.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in u_form.first_name.errors %}
+                                            {{ error }}<br>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_last_name" class="form-label">Last Name</label>
+                                <input type="text" id="id_last_name" name="last_name" class="form-control" value="{{ u_form.last_name.value|default:user.last_name }}">
+                                {% if u_form.last_name.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in u_form.last_name.errors %}
+                                            {{ error }}<br>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_phone" class="form-label">Phone</label>
+                                <input type="tel" id="id_phone" name="phone" class="form-control" value="{{ u_form.phone.value|default:user.phone }}">
+                                {% if u_form.phone.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in u_form.phone.errors %}
+                                            {{ error }}<br>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_date_of_birth" class="form-label">Date of Birth</label>
+                                <input type="date" id="id_date_of_birth" name="date_of_birth" class="form-control" value="{{ u_form.date_of_birth.value|date:'Y-m-d'|default:user.date_of_birth|date:'Y-m-d'|default:'' }}">
+                                {% if u_form.date_of_birth.errors %}
+                                    <div class="text-danger small">
+                                        {% for error in u_form.date_of_birth.errors %}
+                                            {{ error }}<br>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_address" class="form-label">Address</label>
+                            <textarea id="id_address" name="address" class="form-control" rows="3">{{ u_form.address.value|default:user.address }}</textarea>
+                            {% if u_form.address.errors %}
+                                <div class="text-danger small">
+                                    {% for error in u_form.address.errors %}
+                                        {{ error }}<br>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_bio" class="form-label">Bio</label>
+                            <textarea id="id_bio" name="bio" class="form-control" rows="4">{{ u_form.bio.value|default:user.bio }}</textarea>
+                            {% if u_form.bio.errors %}
+                                <div class="text-danger small">
+                                    {% for error in u_form.bio.errors %}
+                                        {{ error }}<br>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <h5 class="card-title mt-4">Profile Picture</h5>
+                        <div class="mb-3">
+                            <label for="profile_picture" class="form-label">Profile Picture</label>
+                            <input type="file" id="profile_picture" name="profile_picture" class="form-control" accept="image/*">
+                            {% if user.profile_picture %}
+                                <div class="mt-3">
+                                    <img src="{{ user.profile_picture.url }}" alt="Current Profile Picture" class="img-thumbnail" style="max-width: 150px; max-height: 150px;">
+                                    <p class="text-muted small">Current profile picture</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Update Profile
+                            </button>
+                            <a href="{% url 'profile' %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Profile Information Display -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0">Profile Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
+                        {% else %}
+                            <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" style="width: 120px; height: 120px; margin: 0 auto;">
+                                <i class="fas fa-user fa-2x text-white"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <h6 class="text-center">{{ user.get_full_name|default:user.username }}</h6>
+                    <p class="text-muted text-center small">{{ user.role }}</p>
+                    
+                    {% if user.email %}
+                    <p class="mb-2">
+                        <i class="fas fa-envelope me-2"></i>
+                        <small>{{ user.email }}</small>
+                    </p>
+                    {% endif %}
+                    
+                    {% if user.phone %}
+                    <p class="mb-2">
+                        <i class="fas fa-phone me-2"></i>
+                        <small>{{ user.phone }}</small>
+                    </p>
+                    {% endif %}
+                    
+                    {% if user.date_of_birth %}
+                    <p class="mb-2">
+                        <i class="fas fa-birthday-cake me-2"></i>
+                        <small>{{ user.date_of_birth|date:"M d, Y" }}</small>
+                    </p>
+                    {% endif %}
+                    
+                    {% if user.address %}
+                    <p class="mb-0">
+                        <i class="fas fa-map-marker-alt me-2"></i>
+                        <small>{{ user.address|truncatewords:10 }}</small>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

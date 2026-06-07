@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - Alumni Connect{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-2">
+                    <i class="fas fa-user me-3"></i>My Profile
+                </h1>
+                <p class="mb-0 fs-5">View and manage your profile information</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'profile_edit' %}" class="btn btn-light">
+                    <i class="fas fa-edit me-2"></i>Edit Profile
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Profile Card -->
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="profile-image mb-4">
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="Profile" 
+                             class="rounded-circle img-fluid" 
+                             style="width: 150px; height: 150px; object-fit: cover; border: 4px solid #667eea;">
+                    {% else %}
+                        <div class="bg-gradient-primary text-white rounded-circle d-inline-flex justify-content-center align-items-center" 
+                             style="width: 150px; height: 150px; font-size: 60px; border: 4px solid #667eea;">
+                            {{ user.first_name.0|default:user.username.0|upper }}
+                        </div>
+                    {% endif %}
+                </div>
+                <h4 class="fw-bold mb-1">{{ user.first_name }} {{ user.last_name }}</h4>
+                <p class="text-muted mb-2">@{{ user.username }}</p>
+                <span class="badge bg-primary fs-6">
+                    <i class="fas fa-user-tag me-1"></i>{{ user.get_role_display|default:user.role }}
+                </span>
+                
+                <hr class="my-4">
+                
+                <div class="d-grid gap-2">
+                    <a href="{% url 'profile_edit' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-edit me-2"></i>Edit Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Profile Details -->
+    <div class="col-md-8">
+        <!-- Personal Information -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-gradient-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-user-circle me-2"></i>Personal Information
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">First Name</label>
+                        <p class="fw-bold mb-0">{{ user.first_name|default:"Not provided" }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">Last Name</label>
+                        <p class="fw-bold mb-0">{{ user.last_name|default:"Not provided" }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">Email</label>
+                        <p class="fw-bold mb-0">
+                            <i class="fas fa-envelope me-2 text-primary"></i>{{ user.email|default:"Not provided" }}
+                        </p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">Phone</label>
+                        <p class="fw-bold mb-0">
+                            <i class="fas fa-phone me-2 text-success"></i>{{ user.phone|default:"Not provided" }}
+                        </p>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted">Address</label>
+                    <p class="fw-bold mb-0">
+                        <i class="fas fa-map-marker-alt me-2 text-danger"></i>{{ user.address|default:"Not provided" }}
+                    </p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted">Date of Birth</label>
+                    <p class="fw-bold mb-0">
+                        <i class="fas fa-birthday-cake me-2 text-warning"></i>{{ user.date_of_birth|default:"Not provided" }}
+                    </p>
+                </div>
+                
+                {% if user.bio %}
+                <div class="mt-4">
+                    <label class="form-label text-muted">Bio</label>
+                    <p class="mb-0">{{ user.bio }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Alumni Profile -->
+        {% if user.role == 'ALUMNI' and user.alumni_profile %}
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-gradient-success text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-graduation-cap me-2"></i>Academic Information
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">Degree</label>
+                        <p class="fw-bold mb-0">{{ user.alumni_profile.degree }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">Department</label>
+                        <p class="fw-bold mb-0">{{ user.alumni_profile.department }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">Graduation Year</label>
+                        <p class="fw-bold mb-0">{{ user.alumni_profile.graduation_year }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">Current Company</label>
+                        <p class="fw-bold mb-0">{{ user.alumni_profile.current_company|default:"Not provided" }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">Current Position</label>
+                        <p class="fw-bold mb-0">{{ user.alumni_profile.current_position|default:"Not provided" }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">Available for Mentoring</label>
+                        <p class="fw-bold mb-0">
+                            {% if user.alumni_profile.is_available_for_mentoring %}
+                                <span class="badge bg-success">Yes</span>
+                            {% else %}
+                                <span class="badge bg-secondary">No</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+                {% if user.alumni_profile.skills %}
+                <div class="mt-3">
+                    <label class="form-label text-muted">Skills</label>
+                    <p class="mb-0">{{ user.alumni_profile.skills }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Student Profile -->
+        {% if user.role == 'STUDENT' and user.student_profile %}
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-gradient-info text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-user-graduate me-2"></i>Academic Information
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">Department</label>
+                        <p class="fw-bold mb-0">{{ user.student_profile.department }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">Enrollment Year</label>
+                        <p class="fw-bold mb-0">{{ user.student_profile.enrollment_year }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">Semester</label>
+                        <p class="fw-bold mb-0">{{ user.student_profile.semester }}</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-muted">Roll Number</label>
+                        <p class="fw-bold mb-0">{{ user.student_profile.roll_number|default:"Not provided" }}</p>
+                    </div>
+                </div>
+                {% if user.student_profile.career_goals %}
+                <div class="mt-3">
+                    <label class="form-label text-muted">Career Goals</label>
+                    <p class="mb-0">{{ user.student_profile.career_goals }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .bg-gradient-success {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    }
+    .bg-gradient-info {
+        background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+    }
+    .profile-image img, .profile-image div {
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+</style>
+{% endblock %}

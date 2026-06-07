@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Alumni Connection Requests - Alumni Connect{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Alumni Connection Requests</h2>
+    </div>
+</div>
+
+<div class="row mt-4">
+    {% for request in requests %}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Request from {{ request.mentee.user.username }}</h5>
+                <p class="card-text">
+                    <strong>Status:</strong> 
+                    <span class="badge bg-{% if request.status == 'ACCEPTED' %}success{% elif request.status == 'REJECTED' %}danger{% else %}warning{% endif %}">
+                        {{ request.get_status_display }}
+                    </span>
+                </p>
+                <p><strong>Message:</strong> {{ request.message }}</p>
+                <p class="text-muted"><small>Requested on: {{ request.created_at }}</small></p>
+                
+                {% if request.status == 'PENDING' %}
+                <form method="post" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="request_id" value="{{ request.pk }}">
+                    <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
+                    <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-md-12">
+        <p>No alumni connection requests.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
